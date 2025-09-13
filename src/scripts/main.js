@@ -1,17 +1,27 @@
 'use strict';
 
-const table = document.querySelector('table');
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.querySelector('table');
 
-['thead', 'tbody', 'tfoot'].forEach(sectionName => {
-  const section = table.querySelector(sectionName);
-
-  if (section) {
-    for (const row of section.rows) {
-      const secondCell = row.cells[1]; // index 1 → second column
-      const clonedCell = secondCell.cloneNode(true);
-
-      // insert before last cell in the row
-      row.insertBefore(clonedCell, row.lastElementChild);
-    }
+  if (!table) {
+    return; // no table found, nothing to do
   }
+
+  ['thead', 'tbody', 'tfoot'].forEach(sectionName => {
+    const section = table.querySelector(sectionName);
+
+    if (section) {
+      for (const row of section.rows) {
+        const secondCell = row.cells[1];
+        if (!secondCell) {
+          continue; // skip if row has < 2 cells
+        }
+
+        const clonedCell = secondCell.cloneNode(true);
+        const lastCell = row.cells[row.cells.length - 1];
+
+        row.insertBefore(clonedCell, lastCell);
+      }
+    }
+  });
 });
